@@ -5,6 +5,7 @@ import com.spring.henallux.transAirPort.dataAccess.entity.OrderEntity;
 import com.spring.henallux.transAirPort.model.FormQuantity;
 import com.spring.henallux.transAirPort.model.OrderLine;
 import com.spring.henallux.transAirPort.model.ProductInfo;
+import com.spring.henallux.transAirPort.service.Promotion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,13 @@ import java.util.Locale;
 public class BasketController {
     private final MessageSource messageSource;
     private ProductInfoDAO productInfoDAO;
+    private Promotion promotion;
 
     @Autowired
-    public BasketController(MessageSource messageSource, ProductInfoDAO productInfoDAO){
+    public BasketController(MessageSource messageSource, ProductInfoDAO productInfoDAO,Promotion promotion){
         this.messageSource = messageSource;
         this.productInfoDAO = productInfoDAO;
+        this.promotion=promotion;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -42,18 +45,18 @@ public class BasketController {
         model.addAttribute("orderLines", hashMap.values());
         model.addAttribute("totalCost",totalCost);
 
-        totalCost = costReducItemQuantity(totalCost, hashMap.values().size());
+        totalCost = promotion.costReducItemQuantity(totalCost, hashMap.values().size());
         model.addAttribute("totalCostReduc",totalCost);
         ToolKit.totalCostAllReducInclusive = totalCost;
 
         return "integrated:basket";
     }
 
-    private double costReducItemQuantity(double totalCost, int sizeBasket){
+    /*public double costReducItemQuantity(double totalCost, int sizeBasket){
         if(sizeBasket>=3){
             return (totalCost *= 0.9);
         }
         else
             return totalCost;
-    }
+    }*/
 }

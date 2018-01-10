@@ -17,6 +17,12 @@ public class OrderLine {
     public OrderLine() {
     }
 
+    public OrderLine(long id,double price, int quantity) {
+        this.id=id;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public long getId() {
         return id;
     }
